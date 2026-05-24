@@ -9,21 +9,15 @@
 
 <title>Cálculo Integral | Sumas de Riemann</title>
 
-<!-- FUENTES -->
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- PLOTLY -->
-
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <style>
-
-/* ===== GENERAL ===== */
 
 *{
 
@@ -54,6 +48,8 @@ header{
 
     padding:25px 40px;
 
+    text-align:center;
+
     border-bottom:1px solid rgba(255,255,255,0.08);
 
     backdrop-filter:blur(10px);
@@ -63,7 +59,7 @@ header h1{
 
     font-family:'Space Grotesk',sans-serif;
 
-    font-size:40px;
+    font-size:42px;
 
     color:#7fd8ff;
 
@@ -76,7 +72,7 @@ header p{
 
     margin-top:10px;
 
-    color:#c7d7ea;
+    color:#dbe9ff;
 
     font-size:18px;
 }
@@ -89,18 +85,18 @@ header p{
 
     width:100%;
 
-    min-height:calc(100vh - 120px);
+    min-height:calc(100vh - 110px);
 }
 
-/* ===== PANEL IZQUIERDO ===== */
+/* ===== SIDEBAR ===== */
 
 .sidebar{
 
-    width:360px;
+    width:340px;
 
-    background:rgba(10,20,35,0.82);
+    background:rgba(10,20,35,0.88);
 
-    border-right:1px solid rgba(255,255,255,0.08);
+    border-right:1px solid rgba(255,255,255,0.06);
 
     padding:30px;
 
@@ -113,7 +109,7 @@ header p{
 
     color:#7fd8ff;
 
-    margin-bottom:25px;
+    margin-bottom:28px;
 
     font-size:28px;
 }
@@ -122,7 +118,7 @@ header p{
 
 .campo{
 
-    margin-bottom:22px;
+    margin-bottom:24px;
 }
 
 .campo label{
@@ -172,14 +168,9 @@ select:focus{
 
 /* ===== SLIDER ===== */
 
-.slider-container{
-
-    margin-top:8px;
-}
-
 .slider-value{
 
-    margin-top:8px;
+    margin-top:10px;
 
     color:#7fd8ff;
 
@@ -218,20 +209,16 @@ input[type="range"]::-webkit-slider-thumb{
     box-shadow:0px 0px 12px rgba(79,195,247,0.7);
 }
 
-/* ===== BOTONES ===== */
+/* ===== BOTON ===== */
 
-.botones{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:14px;
+.boton-descarga{
 
     margin-top:30px;
 }
 
 button{
+
+    width:100%;
 
     padding:15px;
 
@@ -263,115 +250,32 @@ button:hover{
     box-shadow:0px 0px 22px rgba(66,165,245,0.45);
 }
 
-/* ===== RESULTADOS ===== */
-
-.resultados{
-
-    margin-top:35px;
-
-    padding:20px;
-
-    background:rgba(255,255,255,0.04);
-
-    border-radius:18px;
-
-    border:1px solid rgba(255,255,255,0.05);
-}
-
-.resultados h3{
-
-    color:#7fd8ff;
-
-    margin-bottom:18px;
-
-    font-family:'Space Grotesk',sans-serif;
-}
-
-.resultado-item{
-
-    margin-bottom:16px;
-
-    line-height:1.7;
-}
-
-.resultado-titulo{
-
-    color:#9ecbff;
-
-    font-weight:600;
-}
-
-.resultado-valor{
-
-    font-size:20px;
-
-    color:white;
-
-    font-weight:bold;
-}
-
-/* ===== PANEL DERECHO ===== */
+/* ===== CONTENIDO ===== */
 
 .content{
 
     flex:1;
 
     padding:25px;
-}
-
-/* ===== TARJETA SUPERIOR ===== */
-
-.formula-box{
-
-    background:rgba(255,255,255,0.05);
-
-    border:1px solid rgba(255,255,255,0.06);
-
-    border-radius:18px;
-
-    padding:18px 25px;
-
-    margin-bottom:20px;
 
     display:flex;
 
-    align-items:center;
-
-    justify-content:center;
-
-    min-height:90px;
-
-    backdrop-filter:blur(10px);
-}
-
-.formula{
-
-    font-size:28px;
-
-    color:#7fd8ff;
-
-    font-family:'Space Grotesk',sans-serif;
-
-    text-align:center;
+    flex-direction:column;
 }
 
 /* ===== GRAFICA ===== */
 
 .graph-container{
 
-    width:100%;
+    flex:1;
 
-    height:calc(100vh - 260px);
+    background:white;
 
-    background:rgba(255,255,255,0.04);
-
-    border-radius:22px;
+    border-radius:24px;
 
     padding:15px;
 
-    border:1px solid rgba(255,255,255,0.06);
-
-    backdrop-filter:blur(10px);
+    box-shadow:0px 0px 25px rgba(0,0,0,0.25);
 }
 
 #grafica{
@@ -379,6 +283,56 @@ button:hover{
     width:100%;
 
     height:100%;
+}
+
+/* ===== RESULTADOS ===== */
+
+.resultados{
+
+    margin-top:18px;
+
+    background:rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:18px;
+
+    backdrop-filter:blur(8px);
+
+    overflow-x:auto;
+}
+
+.resultados table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    color:white;
+
+    min-width:900px;
+}
+
+.resultados th{
+
+    color:#7fd8ff;
+
+    padding-bottom:12px;
+
+    font-size:15px;
+
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.resultados td{
+
+    text-align:center;
+
+    padding-top:16px;
+
+    font-size:17px;
+
+    font-weight:600;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -421,7 +375,7 @@ button:hover{
 
 <div class="main">
 
-<!-- ===== PANEL IZQUIERDO ===== -->
+<!-- ===== CONTROLES ===== -->
 
 <div class="sidebar">
 
@@ -431,7 +385,12 @@ button:hover{
 
 <label>Función f(x)</label>
 
-<input type="text" id="funcion" value="sin(x)">
+<input
+type="text"
+id="funcion"
+value="sin(x)"
+oninput="graficar()"
+>
 
 </div>
 
@@ -439,7 +398,12 @@ button:hover{
 
 <label>Extremo inferior (a)</label>
 
-<input type="number" id="a" value="0">
+<input
+type="number"
+id="a"
+value="0"
+oninput="graficar()"
+>
 
 </div>
 
@@ -447,7 +411,12 @@ button:hover{
 
 <label>Extremo superior (b)</label>
 
-<input type="number" id="b" value="1">
+<input
+type="number"
+id="b"
+value="1"
+oninput="graficar()"
+>
 
 </div>
 
@@ -455,7 +424,10 @@ button:hover{
 
 <label>Método</label>
 
-<select id="metodo">
+<select
+id="metodo"
+onchange="graficar()"
+>
 
 <option value="derecho">
 Extremo derecho
@@ -477,8 +449,6 @@ Punto medio
 
 <label>Número de particiones (n)</label>
 
-<div class="slider-container">
-
 <input
 type="range"
 min="1"
@@ -496,47 +466,73 @@ n = <span id="valorN">4</span>
 
 </div>
 
-</div>
-
-<div class="botones">
-
-<button onclick="graficar()">
-Calcular
-</button>
+<div class="boton-descarga">
 
 <button onclick="descargarGrafica()">
+
 Descargar gráfica
+
 </button>
 
 </div>
 
-<div class="resultados">
-
-<h3>Resultados</h3>
-
-<div id="resultado"></div>
-
 </div>
 
-</div>
-
-<!-- ===== PANEL DERECHO ===== -->
+<!-- ===== CONTENIDO ===== -->
 
 <div class="content">
 
-<div class="formula-box">
-
-<div class="formula" id="formulaVisual">
-
-∫₀¹ sin(x) dx
-
-</div>
-
-</div>
+<!-- GRAFICA -->
 
 <div class="graph-container">
 
 <div id="grafica"></div>
+
+</div>
+
+<!-- RESULTADOS -->
+
+<div class="resultados">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Método</th>
+
+<th>Ancho de cada partición (Δx)</th>
+
+<th>Área aproximada</th>
+
+<th>Área exacta</th>
+
+<th>Error porcentual</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td id="rMetodo">-</td>
+
+<td id="rDx">-</td>
+
+<td id="rAprox">-</td>
+
+<td id="rExacta">-</td>
+
+<td id="rError">-</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 </div>
 
@@ -569,8 +565,6 @@ function convertirFuncion(expr){
 function formulaBonita(expr){
 
     let t = expr;
-
-    t = t.replaceAll("*","");
 
     t = t.replaceAll("x*x*x","x³");
 
@@ -663,7 +657,7 @@ function graficar(){
 
         line:{
             width:4,
-            color:"#4fc3f7"
+            color:"#00bcd4"
         },
 
         showlegend:false
@@ -673,9 +667,9 @@ function graficar(){
 
     let colores = [
 
-        "rgba(66,165,245,0.45)",
+        "rgba(33,150,243,0.45)",
         "rgba(126,87,194,0.45)",
-        "rgba(38,198,218,0.45)",
+        "rgba(0,188,212,0.45)",
         "rgba(92,107,192,0.45)"
     ];
 
@@ -725,7 +719,7 @@ function graficar(){
             fillcolor:colores[i % colores.length],
 
             line:{
-                color:"#7fd8ff"
+                color:"#1565c0"
             },
 
             mode:"lines",
@@ -755,14 +749,14 @@ function graficar(){
             text:"Visualización dinámica",
 
             font:{
-                color:"#7fd8ff",
+                color:"#0d47a1",
                 size:26
             }
         },
 
-        paper_bgcolor:"rgba(0,0,0,0)",
+        paper_bgcolor:"white",
 
-        plot_bgcolor:"rgba(0,0,0,0)",
+        plot_bgcolor:"white",
 
         dragmode:"zoom",
 
@@ -774,22 +768,22 @@ function graficar(){
 
             title:"x",
 
-            color:"#d6e6ff",
+            color:"#0d47a1",
 
-            gridcolor:"rgba(255,255,255,0.08)",
+            gridcolor:"#d6e4f0",
 
-            zerolinecolor:"#7fd8ff"
+            zerolinecolor:"#0d47a1"
         },
 
         yaxis:{
 
             title:"y",
 
-            color:"#d6e6ff",
+            color:"#0d47a1",
 
-            gridcolor:"rgba(255,255,255,0.08)",
+            gridcolor:"#d6e4f0",
 
-            zerolinecolor:"#7fd8ff"
+            zerolinecolor:"#0d47a1"
         },
 
         annotations:[
@@ -802,32 +796,37 @@ function graficar(){
 
             text:
 
-            "Área aproximada ≈ " +
+            "f(x) = " +
+
+            formulaBonita(exprOriginal)
+
+            +
+
+            "<br><br>"
+
+            +
+
+            "Área aproximada ≈ "
+
+            +
 
             suma.toFixed(5),
 
             showarrow:false,
 
-            bgcolor:"#0b1f3a",
+            bgcolor:"#0d47a1",
 
-            bordercolor:"#7fd8ff",
+            bordercolor:"#42a5f5",
 
             borderwidth:1,
 
             font:{
-                color:"#7fd8ff",
+                color:"white",
                 size:16
             },
 
-            borderpad:8
+            borderpad:10
         }]
-    };
-
-    let config = {
-
-        responsive:true,
-
-        scrollZoom:true
     };
 
     Plotly.newPlot(
@@ -835,114 +834,35 @@ function graficar(){
         "grafica",
         datos,
         layout,
-        config
+        {
+
+            responsive:true,
+
+            scrollZoom:true
+        }
     );
-
-    /* FORMULA */
-
-    document.getElementById("formulaVisual").innerHTML =
-
-    "∫<sub>" +
-
-    a +
-
-    "</sub><sup>" +
-
-    b +
-
-    "</sup> " +
-
-    formulaBonita(exprOriginal) +
-
-    " dx";
 
     /* RESULTADOS */
 
-    document.getElementById("resultado").innerHTML =
+    document.getElementById("rMetodo").innerHTML =
 
-    `
+    metodo;
 
-    <div class="resultado-item">
+    document.getElementById("rDx").innerHTML =
 
-    <div class="resultado-titulo">
+    dx.toFixed(6);
 
-    Método
+    document.getElementById("rAprox").innerHTML =
 
-    </div>
+    suma.toFixed(6);
 
-    <div class="resultado-valor">
+    document.getElementById("rExacta").innerHTML =
 
-    ${metodo}
+    areaExacta.toFixed(6);
 
-    </div>
+    document.getElementById("rError").innerHTML =
 
-    </div>
-
-    <div class="resultado-item">
-
-    <div class="resultado-titulo">
-
-    Ancho de cada partición (Δx)
-
-    </div>
-
-    <div class="resultado-valor">
-
-    ${dx.toFixed(6)}
-
-    </div>
-
-    </div>
-
-    <div class="resultado-item">
-
-    <div class="resultado-titulo">
-
-    Área aproximada
-
-    </div>
-
-    <div class="resultado-valor">
-
-    ${suma.toFixed(6)}
-
-    </div>
-
-    </div>
-
-    <div class="resultado-item">
-
-    <div class="resultado-titulo">
-
-    Área exacta
-
-    </div>
-
-    <div class="resultado-valor">
-
-    ${areaExacta.toFixed(6)}
-
-    </div>
-
-    </div>
-
-    <div class="resultado-item">
-
-    <div class="resultado-titulo">
-
-    Error porcentual
-
-    </div>
-
-    <div class="resultado-valor">
-
-    ${error.toFixed(4)}%
-
-    </div>
-
-    </div>
-
-    `;
+    error.toFixed(4) + "%";
 }
 
 function descargarGrafica(){
@@ -964,8 +884,6 @@ function descargarGrafica(){
     );
 }
 
-/* INICIO */
-
 graficar();
 
 </script>
@@ -973,4 +891,3 @@ graficar();
 </body>
 
 </html>
-
