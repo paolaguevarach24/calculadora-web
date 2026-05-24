@@ -20,7 +20,6 @@
 <style>
 
 *{
-
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -40,7 +39,7 @@ body{
     overflow-x:hidden;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 
 header{
 
@@ -77,7 +76,7 @@ header p{
     font-size:18px;
 }
 
-/* ===== CONTENEDOR PRINCIPAL ===== */
+/* CONTENEDOR */
 
 .main{
 
@@ -88,7 +87,7 @@ header p{
     min-height:calc(100vh - 110px);
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR */
 
 .sidebar{
 
@@ -114,7 +113,7 @@ header p{
     font-size:28px;
 }
 
-/* ===== CAMPOS ===== */
+/* CAMPOS */
 
 .campo{
 
@@ -166,7 +165,7 @@ select:focus{
     box-shadow:0px 0px 15px rgba(79,195,247,0.4);
 }
 
-/* ===== SLIDER ===== */
+/* SLIDER */
 
 .slider-value{
 
@@ -209,7 +208,7 @@ input[type="range"]::-webkit-slider-thumb{
     box-shadow:0px 0px 12px rgba(79,195,247,0.7);
 }
 
-/* ===== BOTON ===== */
+/* BOTON */
 
 .boton-descarga{
 
@@ -250,7 +249,7 @@ button:hover{
     box-shadow:0px 0px 22px rgba(66,165,245,0.45);
 }
 
-/* ===== CONTENIDO ===== */
+/* CONTENIDO */
 
 .content{
 
@@ -263,7 +262,7 @@ button:hover{
     flex-direction:column;
 }
 
-/* ===== GRAFICA ===== */
+/* GRAFICA */
 
 .graph-container{
 
@@ -285,7 +284,7 @@ button:hover{
     height:100%;
 }
 
-/* ===== RESULTADOS ===== */
+/* RESULTADOS */
 
 .resultados{
 
@@ -335,7 +334,7 @@ button:hover{
     font-weight:600;
 }
 
-/* ===== RESPONSIVE ===== */
+/* RESPONSIVE */
 
 @media(max-width:1100px){
 
@@ -375,7 +374,7 @@ button:hover{
 
 <div class="main">
 
-<!-- ===== CONTROLES ===== -->
+<!-- CONTROLES -->
 
 <div class="sidebar">
 
@@ -388,7 +387,6 @@ button:hover{
 <input
 type="text"
 id="funcion"
-value="sin(x)"
 oninput="graficar()"
 >
 
@@ -401,7 +399,6 @@ oninput="graficar()"
 <input
 type="number"
 id="a"
-value="0"
 oninput="graficar()"
 >
 
@@ -414,7 +411,6 @@ oninput="graficar()"
 <input
 type="number"
 id="b"
-value="1"
 oninput="graficar()"
 >
 
@@ -478,19 +474,15 @@ Descargar gráfica
 
 </div>
 
-<!-- ===== CONTENIDO ===== -->
+<!-- CONTENIDO -->
 
 <div class="content">
-
-<!-- GRAFICA -->
 
 <div class="graph-container">
 
 <div id="grafica"></div>
 
 </div>
-
-<!-- RESULTADOS -->
 
 <div class="resultados">
 
@@ -502,7 +494,7 @@ Descargar gráfica
 
 <th>Método</th>
 
-<th>Ancho de cada partición (Δx)</th>
+<th>Ancho (Δx)</th>
 
 <th>Área aproximada</th>
 
@@ -602,6 +594,8 @@ function graficar(){
 
     document.getElementById("funcion").value;
 
+    if(exprOriginal=="") return;
+
     let expr = convertirFuncion(exprOriginal);
 
     let a = parseFloat(
@@ -611,6 +605,8 @@ function graficar(){
     let b = parseFloat(
 
     document.getElementById("b").value);
+
+    if(isNaN(a) || isNaN(b)) return;
 
     let n = parseInt(
 
@@ -660,7 +656,9 @@ function graficar(){
             color:"#00bcd4"
         },
 
-        showlegend:false
+        name:"f(x) = " + formulaBonita(exprOriginal),
+
+        showlegend:true
     });
 
     /* RECTANGULOS */
@@ -742,6 +740,49 @@ function graficar(){
 
     )*100;
 
+    /* LEYENDA DEL AREA */
+
+    datos.push({
+
+        x:[null],
+
+        y:[null],
+
+        mode:"markers",
+
+        marker:{
+            size:10,
+            color:"#1565c0"
+        },
+
+        name:
+
+        "Área aproximada ≈ " +
+
+        suma.toFixed(5),
+
+        showlegend:true
+    });
+
+    /* NOMBRE DEL MÉTODO */
+
+    let metodoTexto = "";
+
+    if(metodo=="derecho"){
+
+        metodoTexto = "Extremo derecho";
+    }
+
+    else if(metodo=="izquierdo"){
+
+        metodoTexto = "Extremo izquierdo";
+    }
+
+    else{
+
+        metodoTexto = "Punto medio";
+    }
+
     let layout = {
 
         title:{
@@ -762,7 +803,25 @@ function graficar(){
 
         hovermode:"closest",
 
-        showlegend:false,
+        showlegend:true,
+
+        legend:{
+
+            x:1.02,
+
+            y:1,
+
+            bgcolor:"rgba(255,255,255,0.9)",
+
+            bordercolor:"#0d47a1",
+
+            borderwidth:1,
+
+            font:{
+                color:"#0d47a1",
+                size:14
+            }
+        },
 
         xaxis:{
 
@@ -784,49 +843,7 @@ function graficar(){
             gridcolor:"#d6e4f0",
 
             zerolinecolor:"#0d47a1"
-        },
-
-        annotations:[
-
-        {
-
-            x:(a+b)/2,
-
-            y:Math.max(...y_func),
-
-            text:
-
-            "f(x) = " +
-
-            formulaBonita(exprOriginal)
-
-            +
-
-            "<br><br>"
-
-            +
-
-            "Área aproximada ≈ "
-
-            +
-
-            suma.toFixed(5),
-
-            showarrow:false,
-
-            bgcolor:"#0d47a1",
-
-            bordercolor:"#42a5f5",
-
-            borderwidth:1,
-
-            font:{
-                color:"white",
-                size:16
-            },
-
-            borderpad:10
-        }]
+        }
     };
 
     Plotly.newPlot(
@@ -846,11 +863,11 @@ function graficar(){
 
     document.getElementById("rMetodo").innerHTML =
 
-    metodo;
+    metodoTexto;
 
     document.getElementById("rDx").innerHTML =
 
-    dx.toFixed(6);
+    dx.toFixed(2);
 
     document.getElementById("rAprox").innerHTML =
 
@@ -883,8 +900,6 @@ function descargarGrafica(){
         }
     );
 }
-
-graficar();
 
 </script>
 
