@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Calculadora Gráfica</title>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+
+body{
+    font-family: Arial;
+    text-align:center;
+    margin-top:40px;
+}
+
+input{
+    width:300px;
+    padding:10px;
+    font-size:18px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:18px;
+}
+
+#grafica{
+    width:80%;
+    height:500px;
+    margin:auto;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Calculadora Gráfica</h1>
+
+<input type="text" id="funcion" placeholder="Ejemplo: x*x">
+
+<button onclick="graficar()">
+Graficar
+</button>
+
+<div id="grafica"></div>
+
+<script>
+
+function graficar(){
+
+    let expr = document.getElementById("funcion").value;
+
+    let x = [];
+    let y = [];
+
+    for(let i=-10; i<=10; i+=0.1){
+
+        x.push(i);
+
+        let valor = eval(expr);
+
+        y.push(valor);
+    }
+
+    let datos = [{
+        x:x,
+        y:y,
+        mode:"lines"
+    }];
+
+    Plotly.newPlot("grafica", datos);
+}
+
+</script>
+
+</body>
+</html>
