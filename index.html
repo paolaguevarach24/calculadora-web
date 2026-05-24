@@ -78,7 +78,7 @@ input, select{
     border:none;
     border-radius:10px;
     font-size:16px;
-    width:170px;
+    width:180px;
     box-shadow:0px 2px 6px rgba(0,0,0,0.2);
 }
 
@@ -101,6 +101,13 @@ button:hover{
     transform:scale(1.05);
 }
 
+.botones{
+
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
 #grafica{
 
     width:100%;
@@ -110,26 +117,17 @@ button:hover{
 .resultado{
 
     text-align:center;
-    font-size:24px;
+    font-size:22px;
     margin:20px;
     color:#1565c0;
     font-weight:bold;
-}
-
-.info{
-
-    background:#e3f2fd;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:20px;
-    color:#0d47a1;
-    line-height:1.7;
+    line-height:1.8;
 }
 
 .metodo{
 
-    font-weight:bold;
     color:#c62828;
+    font-weight:bold;
 }
 
 </style>
@@ -147,19 +145,6 @@ button:hover{
 </header>
 
 <div class="panel">
-
-<div class="info">
-
-<b>Funciones válidas:</b><br>
-
-x*x<br>
-sin(x)<br>
-cos(x)<br>
-ln(x)<br>
-sqrt(x)<br>
-x*x*x - 2*x
-
-</div>
 
 <div class="formulario">
 
@@ -217,12 +202,14 @@ Punto medio
 
 </div>
 
-<div>
+<div class="botones">
 
 <button onclick="graficar()">
-
 Calcular
+</button>
 
+<button onclick="descargarGrafica()">
+Descargar gráfica
 </button>
 
 </div>
@@ -253,11 +240,29 @@ function f(x,expr){
     return eval(expr.replaceAll("x","("+x+")"));
 }
 
+function integralNumerica(expr,a,b){
+
+    let pasos = 10000;
+
+    let h = (b-a)/pasos;
+
+    let total = 0;
+
+    for(let i=0;i<pasos;i++){
+
+        let x = a + i*h;
+
+        total += f(x,expr)*h;
+    }
+
+    return total;
+}
+
 function graficar(){
 
-    let expr = document.getElementById("funcion").value;
+    let exprOriginal = document.getElementById("funcion").value;
 
-    expr = convertirFuncion(expr);
+    let expr = convertirFuncion(exprOriginal);
 
     let a = parseFloat(document.getElementById("a").value);
 
@@ -276,7 +281,6 @@ function graficar(){
     let x_func = [];
     let y_func = [];
 
-    // rango amplio
     let xmin = a - Math.abs(b-a);
     let xmax = b + Math.abs(b-a);
 
@@ -285,6 +289,7 @@ function graficar(){
         try{
 
             x_func.push(x);
+
             y_func.push(f(x,expr));
 
         }catch{
@@ -292,19 +297,21 @@ function graficar(){
         }
     }
 
-    // función
     datos.push({
 
         x:x_func,
+
         y:y_func,
+
         mode:"lines",
+
         line:{
             width:4
         },
+
         name:"f(x)"
     });
 
-    // rectángulos
     for(let i=0; i<n; i++){
 
         let xi;
@@ -358,6 +365,41 @@ function graficar(){
         });
     }
 
+    let areaExacta = integralNumerica(expr,a,b);
+
+    let error =
+
+    Math.abs(
+
+    (areaExacta - suma)/areaExacta
+
+    )*100;
+
+    let nombreMetodo = "";
+
+    let formula = "";
+
+    if(metodo=="derecho"){
+
+        nombreMetodo = "Extremo derecho";
+
+        formula = "Σ f(xi*) Δx";
+    }
+
+    else if(metodo=="izquierdo"){
+
+        nombreMetodo = "Extremo izquierdo";
+
+        formula = "Σ f(xi) Δx";
+    }
+
+    else{
+
+        nombreMetodo = "Punto medio";
+
+        formula = "Σ f(xi medio) Δx";
+    }
+
     let layout = {
 
         title:"Visualización de la Suma de Riemann",
@@ -382,7 +424,28 @@ function graficar(){
             zeroline:true,
 
             showgrid:true
-        }
+        },
+
+        annotations:[
+
+        {
+
+            x:a,
+
+            y:Math.max(...y_func),
+
+            text:
+
+            "Área aprox: " +
+
+            suma.toFixed(4),
+
+            showarrow:false,
+
+            font:{
+                size:18
+            }
+        }]
     };
 
     let config = {
@@ -400,40 +463,74 @@ function graficar(){
         config
     );
 
-    let nombreMetodo = "";
-
-    if(metodo=="derecho"){
-
-        nombreMetodo = "Extremo derecho";
-    }
-
-    else if(metodo=="izquierdo"){
-
-        nombreMetodo = "Extremo izquierdo";
-    }
-
-    else{
-
-        nombreMetodo = "Punto medio";
-    }
-
     document.getElementById("resultado").innerHTML =
 
-        "Método: <span class='metodo'>" +
+    "Método: <span class='metodo'>" +
 
-        nombreMetodo +
+    nombreMetodo +
 
-        "</span><br><br>" +
+    "</span><br><br>" +
 
-        "Δx = " +
+    "Δx = " +
 
-        dx.toFixed(6)
+    dx.toFixed(6)
 
-        +
+    +
 
-        "<br><br>Área aproximada = " +
+    "<br><br>" +
 
-        suma.toFixed(6);
+    "Área aproximada = " +
+
+    suma.toFixed(6)
+
+    +
+
+    "<br><br>" +
+
+    "Área exacta ≈ " +
+
+    areaExacta.toFixed(6)
+
+    +
+
+    "<br><br>" +
+
+    "Error porcentual ≈ " +
+
+    error.toFixed(4)
+
+    +
+
+    "%<br><br>" +
+
+    "Fórmula utilizada:<br>" +
+
+    formula +
+
+    "<br><br>" +
+
+    "Límite asociado:<br>" +
+
+    "lim n→∞ Σ f(xi*) Δx";
+}
+
+function descargarGrafica(){
+
+    Plotly.downloadImage(
+
+        "grafica",
+
+        {
+
+            format:"png",
+
+            filename:"suma_riemann",
+
+            height:700,
+
+            width:1200
+        }
+    );
 }
 
 </script>
