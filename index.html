@@ -2,35 +2,97 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
-<title>Sumas de Riemann</title>
+
+<title>Cálculo Integral - Sumas de Riemann</title>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <style>
 
 body{
+
+    margin:0;
     font-family:Arial;
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    color:white;
     text-align:center;
-    background:#f4f4f4;
+}
+
+header{
+
+    padding:25px;
+    font-size:35px;
+    font-weight:bold;
+}
+
+.subtitulo{
+
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.panel{
+
+    background:white;
+    color:black;
+    width:90%;
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0px 0px 20px rgba(0,0,0,0.3);
 }
 
 input{
-    padding:8px;
-    margin:5px;
-    width:120px;
+
+    padding:12px;
+    margin:8px;
+    border-radius:10px;
+    border:none;
+    width:140px;
+    font-size:16px;
+    box-shadow:0px 2px 5px rgba(0,0,0,0.2);
 }
 
 button{
-    padding:10px 20px;
+
+    padding:12px 25px;
+    border:none;
+    border-radius:12px;
+    background:#1e88e5;
+    color:white;
+    font-size:17px;
     cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+
+    background:#1565c0;
+    transform:scale(1.05);
 }
 
 #grafica{
-    width:90%;
-    height:700px;
-    margin:auto;
-    background:white;
+
+    width:100%;
+    height:750px;
+    margin-top:20px;
+}
+
+.resultado{
+
+    margin-top:20px;
+    font-size:22px;
+    font-weight:bold;
+    color:#1565c0;
+}
+
+.info{
+
+    margin-top:15px;
+    color:#444;
 }
 
 </style>
@@ -39,9 +101,36 @@ button{
 
 <body>
 
-<h1>Calculadora de Sumas de Riemann</h1>
+<header>
 
-<input type="text" id="funcion" placeholder="f(x) = x*x">
+CÁLCULO INTEGRAL
+
+</header>
+
+<div class="subtitulo">
+
+Calculadora Gráfica de Sumas de Riemann
+
+</div>
+
+<div class="panel">
+
+<div class="info">
+
+Escribe funciones como:
+<br><br>
+
+x*x
+<br>
+sin(x)
+<br>
+ln(x)/x
+
+</div>
+
+<br>
+
+<input type="text" id="funcion" placeholder="f(x)">
 
 <input type="number" id="a" placeholder="a">
 
@@ -50,23 +139,40 @@ button{
 <input type="number" id="n" placeholder="n">
 
 <button onclick="graficar()">
+
 Calcular
+
 </button>
 
-<h2 id="resultado"></h2>
+<div class="resultado" id="resultado"></div>
 
 <div id="grafica"></div>
 
+</div>
+
 <script>
 
-function f(x, expr){
+function convertirFuncion(expr){
 
-    return eval(expr.replaceAll("x", "(" + x + ")"));
+    expr = expr.replaceAll("ln","Math.log");
+    expr = expr.replaceAll("sin","Math.sin");
+    expr = expr.replaceAll("cos","Math.cos");
+    expr = expr.replaceAll("tan","Math.tan");
+    expr = expr.replaceAll("sqrt","Math.sqrt");
+
+    return expr;
+}
+
+function f(x,expr){
+
+    return eval(expr.replaceAll("x","("+x+")"));
 }
 
 function graficar(){
 
     let expr = document.getElementById("funcion").value;
+
+    expr = convertirFuncion(expr);
 
     let a = parseFloat(document.getElementById("a").value);
 
@@ -81,24 +187,38 @@ function graficar(){
     let x_func = [];
     let y_func = [];
 
-    // curva
-    for(let x=a; x<=b; x+=0.01){
+    // Rango amplio de visualización
+    let xmin = a - Math.abs(b-a);
+    let xmax = b + Math.abs(b-a);
 
-        x_func.push(x);
+    for(let x=xmin; x<=xmax; x+=0.01){
 
-        y_func.push(f(x,expr));
+        try{
+
+            x_func.push(x);
+
+            y_func.push(f(x,expr));
+
+        }catch{
+
+        }
     }
 
     let datos = [];
 
+    // Función
     datos.push({
+
         x:x_func,
         y:y_func,
         mode:"lines",
+        line:{
+            width:4
+        },
         name:"f(x)"
     });
 
-    // rectángulos derechos
+    // Rectángulos derechos
     for(let i=1; i<=n; i++){
 
         let xi = a + i*dx;
@@ -107,39 +227,70 @@ function graficar(){
 
         suma += altura*dx;
 
-        let rectangulo = {
-            x:[
-                xi-dx,
-                xi,
-                xi,
-                xi-dx,
-                xi-dx
-            ],
+        datos.push({
 
-            y:[
-                0,
-                0,
-                altura,
-                altura,
-                0
-            ],
+            x:[xi-dx,xi,xi,xi-dx,xi-dx],
+
+            y:[0,0,altura,altura,0],
 
             fill:"toself",
-            type:"scatter",
-            mode:"lines",
-            name:"Rectángulo"
-        };
 
-        datos.push(rectangulo);
+            opacity:0.4,
+
+            type:"scatter",
+
+            mode:"lines",
+
+            name:"Rectángulo"
+        });
     }
 
-    Plotly.newPlot("grafica", datos);
+    let layout = {
+
+        title:"Visualización de la Suma de Riemann",
+
+        dragmode:"zoom",
+
+        xaxis:{
+
+            zeroline:true,
+            showgrid:true
+        },
+
+        yaxis:{
+
+            zeroline:true,
+            showgrid:true
+        },
+
+        hovermode:"closest"
+    };
+
+    let config = {
+
+        scrollZoom:true,
+        responsive:true
+    };
+
+    Plotly.newPlot(
+
+        "grafica",
+        datos,
+        layout,
+        config
+    );
 
     document.getElementById("resultado").innerHTML =
 
-        "Área aproximada = " + suma.toFixed(6) +
+        "Área aproximada = " +
 
-        "<br>Δx = " + dx.toFixed(4);
+        suma.toFixed(6)
+
+        +
+
+        "<br>Δx = " +
+
+        dx.toFixed(6);
 }
 
 </script>
