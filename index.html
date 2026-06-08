@@ -1,908 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Cálculo Integral | Sumas de Riemann</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-
-    background:
-    radial-gradient(circle at top left,#17376e,#081426 60%);
-
-    color:white;
-
-    font-family:'Inter',sans-serif;
-
-    min-height:100vh;
-
-    overflow-x:hidden;
-}
-
-/* HEADER */
-
-header{
-
-    width:100%;
-
-    padding:25px 40px;
-
-    text-align:center;
-
-    border-bottom:1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(10px);
-}
-
-header h1{
-
-    font-family:'Space Grotesk',sans-serif;
-
-    font-size:42px;
-
-    color:#7fd8ff;
-
-    letter-spacing:2px;
-
-    text-shadow:0px 0px 12px rgba(127,216,255,0.4);
-}
-
-header p{
-
-    margin-top:10px;
-
-    color:#dbe9ff;
-
-    font-size:18px;
-}
-
-/* CONTENEDOR */
-
-.main{
-
-    display:flex;
-
-    width:100%;
-
-    min-height:calc(100vh - 110px);
-}
-
-/* SIDEBAR */
-
-.sidebar{
-
-    width:340px;
-
-    background:rgba(10,20,35,0.88);
-
-    border-right:1px solid rgba(255,255,255,0.06);
-
-    padding:30px;
-
-    backdrop-filter:blur(12px);
-}
-
-.sidebar h2{
-
-    font-family:'Space Grotesk',sans-serif;
-
-    color:#7fd8ff;
-
-    margin-bottom:28px;
-
-    font-size:28px;
-}
-
-/* CAMPOS */
-
-.campo{
-
-    margin-bottom:24px;
-}
-
-.campo label{
-
-    display:block;
-
-    margin-bottom:10px;
-
-    color:#9ecbff;
-
-    font-weight:600;
-
-    font-size:15px;
-}
-
-input,
-select{
-
-    width:100%;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:#10243d;
-
-    color:white;
-
-    font-size:16px;
-
-    outline:none;
-
-    transition:0.3s;
-
-    border:1px solid transparent;
-}
-
-input:focus,
-select:focus{
-
-    border:1px solid #4fc3f7;
-
-    box-shadow:0px 0px 15px rgba(79,195,247,0.4);
-}
-
-/* SLIDER */
-
-.slider-value{
-
-    margin-top:10px;
-
-    color:#7fd8ff;
-
-    font-weight:bold;
-
-    font-size:18px;
-}
-
-input[type="range"]{
-
-    appearance:none;
-
-    height:8px;
-
-    background:#1d3a63;
-
-    border-radius:10px;
-
-    padding:0;
-}
-
-input[type="range"]::-webkit-slider-thumb{
-
-    appearance:none;
-
-    width:22px;
-
-    height:22px;
-
-    border-radius:50%;
-
-    background:#4fc3f7;
-
-    cursor:pointer;
-
-    box-shadow:0px 0px 12px rgba(79,195,247,0.7);
-}
-
-/* BOTON */
-
-.boton-descarga{
-
-    margin-top:30px;
-}
-
-button{
-
-    width:100%;
-
-    padding:15px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:linear-gradient(135deg,#1976d2,#42a5f5);
-
-    color:white;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:0.3s;
-
-    font-family:'Inter',sans-serif;
-
-    box-shadow:0px 0px 18px rgba(66,165,245,0.25);
-}
-
-button:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0px 0px 22px rgba(66,165,245,0.45);
-}
-
-/* CONTENIDO */
-
-.content{
-
-    flex:1;
-
-    padding:25px;
-
-    display:flex;
-
-    flex-direction:column;
-}
-
-/* GRAFICA */
-
-.graph-container{
-
-    flex:1;
-
-    background:white;
-
-    border-radius:24px;
-
-    padding:15px;
-
-    box-shadow:0px 0px 25px rgba(0,0,0,0.25);
-}
-
-#grafica{
-
-    width:100%;
-
-    height:100%;
-}
-
-/* RESULTADOS */
-
-.resultados{
-
-    margin-top:18px;
-
-    background:rgba(255,255,255,0.05);
-
-    border-radius:18px;
-
-    padding:18px;
-
-    backdrop-filter:blur(8px);
-
-    overflow-x:auto;
-}
-
-.resultados table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    color:white;
-
-    min-width:900px;
-}
-
-.resultados th{
-
-    color:#7fd8ff;
-
-    padding-bottom:12px;
-
-    font-size:15px;
-
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.resultados td{
-
-    text-align:center;
-
-    padding-top:16px;
-
-    font-size:17px;
-
-    font-weight:600;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:1100px){
-
-    .main{
-
-        flex-direction:column;
-    }
-
-    .sidebar{
-
-        width:100%;
-
-        border-right:none;
-
-        border-bottom:1px solid rgba(255,255,255,0.08);
-    }
-
-    .graph-container{
-
-        height:700px;
-    }
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:#0b1f3a;color:white}
+header{text-align:center;padding:20px}
+.main{display:flex;min-height:100vh}
+.sidebar{width:320px;background:#10243d;padding:20px}
+.content{flex:1;padding:20px}
+label{display:block;margin-top:12px}
+input,select{width:100%;padding:10px;margin-top:5px}
+button{width:100%;padding:12px;margin-top:15px}
+.graph{background:white;border-radius:10px;height:650px}
+#grafica{width:100%;height:100%}
+table{width:100%;margin-top:15px;background:#10243d}
+th,td{padding:10px;text-align:center}
 </style>
-
 </head>
-
 <body>
-
 <header>
-
 <h1>CÁLCULO INTEGRAL</h1>
-
 <p>Calculadora gráfica interactiva de Sumas de Riemann</p>
-
 </header>
 
 <div class="main">
-
-<!-- CONTROLES -->
-
 <div class="sidebar">
-
 <h2>Controles</h2>
 
-<div class="campo">
-
 <label>Función f(x)</label>
-
-<input
-type="text"
-id="funcion"
-oninput="graficar()"
->
-
-</div>
-
-<div class="campo">
+<input id="funcion" oninput="graficar()">
 
 <label>Extremo inferior (a)</label>
-
-<input
-type="number"
-id="a"
-oninput="graficar()"
->
-
-</div>
-
-<div class="campo">
+<input type="number" id="a" oninput="graficar()">
 
 <label>Extremo superior (b)</label>
-
-<input
-type="number"
-id="b"
-oninput="graficar()"
->
-
-</div>
-
-<div class="campo">
+<input type="number" id="b" oninput="graficar()">
 
 <label>Método</label>
-
-<select
-id="metodo"
-onchange="graficar()"
->
-
-<option value="derecho">
-Extremo derecho
-</option>
-
-<option value="izquierdo">
-Extremo izquierdo
-</option>
-
-<option value="medio">
-Punto medio
-</option>
-
+<select id="metodo" onchange="graficar()">
+<option value="derecho">Extremo derecho</option>
+<option value="izquierdo">Extremo izquierdo</option>
+<option value="medio">Punto medio</option>
 </select>
 
-</div>
-
-<div class="campo">
-
 <label>Número de particiones (n)</label>
+<input type="range" min="1" max="1000" value="10" id="sliderN" oninput="syncSlider()">
+<div>n = <span id="valorN">10</span></div>
 
-<input
-type="range"
-min="1"
-max="100"
-value="4"
-id="sliderN"
-oninput="actualizarN()"
->
+<input type="number" id="inputN" value="10" oninput="syncInput()">
 
-<div class="slider-value">
-
-n = <span id="valorN">4</span>
+<button onclick="descargarGrafica()">Descargar gráfica</button>
 
 </div>
-
-</div>
-
-<div class="boton-descarga">
-
-<button onclick="descargarGrafica()">
-
-Descargar gráfica
-
-</button>
-
-</div>
-
-</div>
-
-<!-- CONTENIDO -->
 
 <div class="content">
-
-<div class="graph-container">
-
+<div class="graph">
 <div id="grafica"></div>
-
 </div>
-
-<div class="resultados">
 
 <table>
-
-<thead>
-
 <tr>
-
 <th>Método</th>
-
 <th>Ancho (Δx)</th>
-
 <th>Área aproximada</th>
-
 <th>Área exacta</th>
-
-<th>Error porcentual</th>
-
+<th>Error %</th>
 </tr>
-
-</thead>
-
-<tbody>
-
 <tr>
-
 <td id="rMetodo">-</td>
-
 <td id="rDx">-</td>
-
 <td id="rAprox">-</td>
-
 <td id="rExacta">-</td>
-
 <td id="rError">-</td>
-
 </tr>
-
-</tbody>
-
 </table>
-
 </div>
-
-</div>
-
 </div>
 
 <script>
-
-function actualizarN(){
-
-    document.getElementById("valorN").innerHTML =
-
-    document.getElementById("sliderN").value;
-
-    graficar();
+function syncSlider(){
+ let v=document.getElementById('sliderN').value;
+ document.getElementById('valorN').innerText=v;
+ document.getElementById('inputN').value=v;
+ graficar();
 }
 
-function convertirFuncion(expr){
-
-    expr = expr.replaceAll("ln","Math.log");
-    expr = expr.replaceAll("sin","Math.sin");
-    expr = expr.replaceAll("cos","Math.cos");
-    expr = expr.replaceAll("tan","Math.tan");
-    expr = expr.replaceAll("sqrt","Math.sqrt");
-
-    return expr;
+function syncInput(){
+ let v=parseInt(document.getElementById('inputN').value)||1;
+ document.getElementById('valorN').innerText=v;
+ document.getElementById('sliderN').value=Math.min(v,1000);
+ graficar();
 }
 
-function formulaBonita(expr){
-
-    let t = expr;
-
-    t = t.replaceAll("x*x*x","x³");
-
-    t = t.replaceAll("x*x","x²");
-
-    return t;
+function conv(e){
+ return e.replaceAll('ln','Math.log')
+ .replaceAll('sin','Math.sin')
+ .replaceAll('cos','Math.cos')
+ .replaceAll('tan','Math.tan')
+ .replaceAll('sqrt','Math.sqrt');
 }
 
-function f(x,expr){
+function f(x,e){ return eval(e.replaceAll('x','('+x+')')); }
 
-    return eval(expr.replaceAll("x","("+x+")"));
-}
-
-function integralNumerica(expr,a,b){
-
-    let pasos = 10000;
-
-    let h = (b-a)/pasos;
-
-    let total = 0;
-
-    for(let i=0;i<pasos;i++){
-
-        let x = a + i*h;
-
-        total += f(x,expr)*h;
-    }
-
-    return total;
+function integral(e,a,b){
+ let n=10000,h=(b-a)/n,s=0;
+ for(let i=0;i<n;i++) s+=f(a+i*h,e)*h;
+ return s;
 }
 
 function graficar(){
-
-    let exprOriginal =
-
-    document.getElementById("funcion").value;
-
-    if(exprOriginal=="") return;
-
-    let expr = convertirFuncion(exprOriginal);
-
-    let a = parseFloat(
-
-    document.getElementById("a").value);
-
-    let b = parseFloat(
-
-    document.getElementById("b").value);
-
-    if(isNaN(a) || isNaN(b)) return;
-
-    let n = parseInt(
-
-    document.getElementById("sliderN").value);
-
-    let metodo =
-
-    document.getElementById("metodo").value;
-
-    let dx = (b-a)/n;
-
-    let suma = 0;
-
-    let datos = [];
-
-    let x_func = [];
-
-    let y_func = [];
-
-    let xmin = a - Math.abs(b-a);
-
-    let xmax = b + Math.abs(b-a);
-
-    for(let x=xmin;x<=xmax;x+=0.01){
-
-        try{
-
-            x_func.push(x);
-
-            y_func.push(f(x,expr));
-
-        }catch{}
-    }
-
-    /* CURVA */
-
-    datos.push({
-
-        x:x_func,
-
-        y:y_func,
-
-        mode:"lines",
-
-        line:{
-            width:4,
-            color:"#00bcd4"
-        },
-
-        name:"f(x) = " + formulaBonita(exprOriginal),
-
-        showlegend:true
-    });
-
-    /* RECTANGULOS */
-
-    let colores = [
-
-        "rgba(33,150,243,0.45)",
-        "rgba(126,87,194,0.45)",
-        "rgba(0,188,212,0.45)",
-        "rgba(92,107,192,0.45)"
-    ];
-
-    for(let i=0;i<n;i++){
-
-        let xi;
-
-        if(metodo=="derecho"){
-
-            xi = a + (i+1)*dx;
-        }
-
-        else if(metodo=="izquierdo"){
-
-            xi = a + i*dx;
-        }
-
-        else{
-
-            xi = a + (i+0.5)*dx;
-        }
-
-        let altura = f(xi,expr);
-
-        suma += altura*dx;
-
-        datos.push({
-
-            x:[
-                a+i*dx,
-                a+(i+1)*dx,
-                a+(i+1)*dx,
-                a+i*dx,
-                a+i*dx
-            ],
-
-            y:[
-                0,
-                0,
-                altura,
-                altura,
-                0
-            ],
-
-            fill:"toself",
-
-            fillcolor:colores[i % colores.length],
-
-            line:{
-                color:"#1565c0"
-            },
-
-            mode:"lines",
-
-            type:"scatter",
-
-            showlegend:false
-        });
-    }
-
-    let areaExacta =
-
-    integralNumerica(expr,a,b);
-
-    let error =
-
-    Math.abs(
-
-    (areaExacta-suma)/areaExacta
-
-    )*100;
-
-    /* LEYENDA DEL AREA */
-
-    datos.push({
-
-        x:[null],
-
-        y:[null],
-
-        mode:"markers",
-
-        marker:{
-            size:10,
-            color:"#1565c0"
-        },
-
-        name:
-
-        "Área aproximada ≈ " +
-
-        suma.toFixed(5),
-
-        showlegend:true
-    });
-
-    /* NOMBRE DEL MÉTODO */
-
-    let metodoTexto = "";
-
-    if(metodo=="derecho"){
-
-        metodoTexto = "Extremo derecho";
-    }
-
-    else if(metodo=="izquierdo"){
-
-        metodoTexto = "Extremo izquierdo";
-    }
-
-    else{
-
-        metodoTexto = "Punto medio";
-    }
-
-    let layout = {
-
-        title:{
-
-            text:"Visualización dinámica",
-
-            font:{
-                color:"#0d47a1",
-                size:26
-            }
-        },
-
-        paper_bgcolor:"white",
-
-        plot_bgcolor:"white",
-
-        dragmode:"zoom",
-
-        hovermode:"closest",
-
-        showlegend:true,
-
-        legend:{
-
-            x:1.02,
-
-            y:1,
-
-            bgcolor:"rgba(255,255,255,0.9)",
-
-            bordercolor:"#0d47a1",
-
-            borderwidth:1,
-
-            font:{
-                color:"#0d47a1",
-                size:14
-            }
-        },
-
-        xaxis:{
-
-            title:"x",
-
-            color:"#0d47a1",
-
-            gridcolor:"#d6e4f0",
-
-            zerolinecolor:"#0d47a1"
-        },
-
-        yaxis:{
-
-            title:"y",
-
-            color:"#0d47a1",
-
-            gridcolor:"#d6e4f0",
-
-            zerolinecolor:"#0d47a1"
-        }
-    };
-
-    Plotly.newPlot(
-
-        "grafica",
-        datos,
-        layout,
-        {
-
-            responsive:true,
-
-            scrollZoom:true
-        }
-    );
-
-    /* RESULTADOS */
-
-    document.getElementById("rMetodo").innerHTML =
-
-    metodoTexto;
-
-    document.getElementById("rDx").innerHTML =
-
-    dx.toFixed(2);
-
-    document.getElementById("rAprox").innerHTML =
-
-    suma.toFixed(6);
-
-    document.getElementById("rExacta").innerHTML =
-
-    areaExacta.toFixed(6);
-
-    document.getElementById("rError").innerHTML =
-
-    error.toFixed(4) + "%";
+ let ex0=document.getElementById('funcion').value;
+ if(!ex0) return;
+
+ let a=parseFloat(document.getElementById('a').value);
+ let b=parseFloat(document.getElementById('b').value);
+ if(isNaN(a)||isNaN(b)) return;
+
+ let ex=conv(ex0);
+ let n=parseInt(document.getElementById('inputN').value)||1;
+ let m=document.getElementById('metodo').value;
+
+ let dx=(b-a)/n;
+ let suma=0;
+
+ let xf=[], yf=[];
+ for(let x=a-Math.abs(b-a); x<=b+Math.abs(b-a); x+=0.02){
+  try{ xf.push(x); yf.push(f(x,ex)); }catch(err){}
+ }
+
+ let data=[{
+  x:xf,y:yf,type:'scatter',mode:'lines',
+  name:'f(x)='+ex0
+ }];
+
+ if(n<=300){
+  for(let i=0;i<n;i++){
+   let xi=m=="derecho"?a+(i+1)*dx:m=="izquierdo"?a+i*dx:a+(i+0.5)*dx;
+   let h=f(xi,ex);
+   suma+=h*dx;
+
+   data.push({
+    x:[a+i*dx,a+(i+1)*dx,a+(i+1)*dx,a+i*dx,a+i*dx],
+    y:[0,0,h,h,0],
+    fill:'toself',
+    type:'scatter',
+    showlegend:false
+   });
+  }
+ }else{
+  for(let i=0;i<n;i++){
+   let xi=m=="derecho"?a+(i+1)*dx:m=="izquierdo"?a+i*dx:a+(i+0.5)*dx;
+   suma+=f(xi,ex)*dx;
+  }
+ }
+
+ let exacta=integral(ex,a,b);
+ let error=Math.abs((exacta-suma)/exacta)*100;
+
+ data.push({
+  x:[null],y:[null],
+  mode:'markers',
+  name:'Área ≈ '+suma.toFixed(5)
+ });
+
+ Plotly.newPlot('grafica',data,{
+  paper_bgcolor:'white',
+  plot_bgcolor:'white',
+  legend:{x:1.02,y:1}
+ },{responsive:true,scrollZoom:true});
+
+ document.getElementById('rMetodo').innerText=
+  m=="derecho"?"Extremo derecho":m=="izquierdo"?"Extremo izquierdo":"Punto medio";
+ document.getElementById('rDx').innerText=dx.toFixed(2);
+ document.getElementById('rAprox').innerText=suma.toFixed(6);
+ document.getElementById('rExacta').innerText=exacta.toFixed(6);
+ document.getElementById('rError').innerText=error.toFixed(4)+'%';
 }
 
 function descargarGrafica(){
-
-    Plotly.downloadImage(
-
-        "grafica",
-
-        {
-
-            format:"png",
-
-            filename:"suma_riemann",
-
-            width:1600,
-
-            height:900
-        }
-    );
+ Plotly.downloadImage('grafica',{format:'png',filename:'suma_riemann'});
 }
-
 </script>
-
 </body>
-
 </html>
